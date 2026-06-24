@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
 import "leaflet/dist/leaflet.css";
+import "react-leaflet-cluster/dist/assets/MarkerCluster.css";
+import "react-leaflet-cluster/dist/assets/MarkerCluster.Default.css";
 import GlassCard from "../components/GlassCard";
 import StatusTerminal from "../components/StatusTerminal";
 import Skeleton from "../components/Skeleton";
@@ -33,9 +36,18 @@ function getScoreBg(score: number) {
   return score >= 85 ? "bg-secondary" : score >= 70 ? "bg-neon" : "bg-error";
 }
 
+interface CustomDivIcon extends L.DivIcon {
+  options: L.DivIconOptions & { score?: number };
+}
+
+interface CustomMarkerCluster {
+  getChildCount: () => number;
+  getAllChildMarkers: () => L.Marker[];
+}
+
 const createCustomIcon = (score: number) => {
   const hex = score >= 85 ? "#b5d25e" : score >= 70 ? "#c3f400" : "#ffb4ab";
-  return L.divIcon({
+  const icon = L.divIcon({
     className: "custom-leaflet-icon bg-transparent",
     html: `<div style="
       width:14px;height:14px;
@@ -47,6 +59,56 @@ const createCustomIcon = (score: number) => {
     iconSize: [20, 20],
     iconAnchor: [10, 10],
     popupAnchor: [0, -14],
+  }) as CustomDivIcon;
+  icon.options.score = score;
+  return icon;
+};
+
+const createClusterIcon = (cluster: CustomMarkerCluster) => {
+  const count = cluster.getChildCount();
+  const childMarkers = cluster.getAllChildMarkers();
+
+  let sum = 0;
+  let scoreCount = 0;
+  childMarkers.forEach((marker) => {
+    const icon = marker.getIcon() as CustomDivIcon;
+    const score = icon?.options?.score;
+    if (typeof score === "number") {
+      sum += score;
+      scoreCount++;
+    }
+  });
+
+  const avgScore = scoreCount > 0 ? Math.round(sum / scoreCount) : 0;
+  const hex = avgScore >= 85 ? "#b5d25e" : avgScore >= 70 ? "#c3f400" : "#ffb4ab";
+
+  let size = 36;
+  if (count > 50) size = 44;
+  if (count > 200) size = 52;
+
+  return L.divIcon({
+    className: "custom-leaflet-cluster bg-transparent",
+    html: `<div style="
+      width: ${size}px;
+      height: ${size}px;
+      background-color: rgba(20, 20, 20, 0.85);
+      border: 2px solid ${hex};
+      border-radius: 50%;
+      color: ${hex};
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: monospace;
+      font-weight: bold;
+      font-size: ${size > 44 ? "0.85rem" : "0.75rem"};
+      box-shadow: 0 0 15px ${hex}60, inset 0 0 10px ${hex}30;
+      backdrop-filter: blur(4px);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    " onmouseenter="this.style.transform='scale(1.1)'" onmouseleave="this.style.transform='scale(1)'">
+      ${count}
+    </div>`,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
   });
 };
 
@@ -159,30 +221,36 @@ export default function MarketMapPage() {
         >
           <RecenterMap center={mapCenter} />
           <TileLayer url={tileUrl} attribution="&copy; CARTO" />
-          {markers.map((m) => (
-            <Marker
-              key={m.id}
-              position={[m.lat, m.lng]}
-              icon={createCustomIcon(m.score)}
-              eventHandlers={{ click: () => setSelected(m) }}
-            >
-              <Popup className="brutalist-popup" closeButton={false}>
-                <div className="p-2 font-mono">
-                  <div className="text-[0.65rem] font-bold text-[#e2e2e2] uppercase mb-1">
-                    {m.name}
+          <MarkerClusterGroup
+            chunkedLoading
+            iconCreateFunction={createClusterIcon}
+            showCoverageOnHover={false}
+          >
+            {markers.map((m) => (
+              <Marker
+                key={m.id}
+                position={[m.lat, m.lng]}
+                icon={createCustomIcon(m.score)}
+                eventHandlers={{ click: () => setSelected(m) }}
+              >
+                <Popup className="brutalist-popup" closeButton={false}>
+                  <div className="p-2 font-mono">
+                    <div className="text-[0.65rem] font-bold text-[#e2e2e2] uppercase mb-1">
+                      {m.name}
+                    </div>
+                    <div
+                      className="text-[0.55rem] tracking-widest"
+                      style={{
+                        color: m.score >= 85 ? "#b5d25e" : m.score >= 70 ? "#c3f400" : "#ffb4ab",
+                      }}
+                    >
+                      {t('marketMap.scorePrefix')}{m.score} | {t('marketMap.vendorsPrefix')}{m.vendors}
+                    </div>
                   </div>
-                  <div
-                    className="text-[0.55rem] tracking-widest"
-                    style={{
-                      color: m.score >= 85 ? "#b5d25e" : m.score >= 70 ? "#c3f400" : "#ffb4ab",
-                    }}
-                  >
-                    {t('marketMap.scorePrefix')}{m.score} | {t('marketMap.vendorsPrefix')}{m.vendors}
-                  </div>
-                </div>
-              </Popup>
-            </Marker>
-          ))}
+                </Popup>
+              </Marker>
+            ))}
+          </MarkerClusterGroup>
         </MapContainer>
       </div>
 
