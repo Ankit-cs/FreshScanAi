@@ -91,7 +91,7 @@ const createClusterIcon = (cluster: CustomMarkerCluster) => {
     html: `<div style="
       width: ${size}px;
       height: ${size}px;
-      background-color: rgba(20, 20, 20, 0.85);
+      background-color: var(--glass-bg);
       border: 2px solid ${hex};
       border-radius: 50%;
       color: ${hex};
