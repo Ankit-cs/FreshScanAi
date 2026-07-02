@@ -34,6 +34,7 @@
     "stepsTo": "নিশ্চিততার জন্য তিন ধাপ",
     "certainty": "নিশ্চিততা",
     "faqTitle": "প্রোটোকল FAQ",
+    "viewAllFaqs": "সব FAQ দেখুন",
     "frequentlyAsked": "প্রায়শই জিজ্ঞাসিত",
     "questions": "প্রশ্ন",
     "assessmentReady": "মূল্যায়ন প্রস্তুত",
@@ -317,6 +318,7 @@
     },
     "footer": {
       "freshscanAi": "FreshScan AI",
+      "faq": "FAQ",
       "copyright": "© 2026 FreshScan AI. সর্বাধিকার সংরক্ষিত। নির্ভুল বুদ্ধিমত্তা।"
     },
     "layout": {
