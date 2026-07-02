@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -13,6 +14,9 @@ export default function Footer() {
 
         {/* Copyright — matches body paragraph (text-on-surface-variant) */}
         <p className="text-on-surface-variant text-sm leading-relaxed text-center sm:text-right m-0">
+          <Link to="/faq" className="font-[family-name:var(--font-mono)] text-xs tracking-widest text-on-surface-variant hover:text-neon transition-colors duration-200 no-underline mr-4">
+            {t('components.footer.faq')}
+          </Link>
           {t('components.footer.copyright')}
         </p>
 

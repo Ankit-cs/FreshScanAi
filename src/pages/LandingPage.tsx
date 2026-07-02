@@ -242,6 +242,17 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
+
+          {/* Link to full FAQ page */}
+          <div className="mt-8 text-center">
+            <Link
+              to="/faq"
+              className="inline-flex items-center gap-2 font-[family-name:var(--font-mono)] text-xs tracking-widest text-neon border border-neon/40 px-5 py-2.5 hover:bg-neon hover:text-on-primary transition-all duration-200 no-underline"
+            >
+              {t('landing.viewAllFaqs')}
+              <span aria-hidden>→</span>
+            </Link>
+          </div>
         </div>
       </section>
 
