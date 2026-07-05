@@ -368,5 +368,23 @@
     },
     "unknown": "एक अप्रत्याशित त्रुटि हुई। कृपया पुनः प्रयास करें।",
     "serverError": "सर्वर त्रुटि। कृपया बाद में पुनः प्रयास करें।"
+  },
+  "analytics": {
+    "totalScans": "कुल स्कैन",
+    "avgFreshness": "औसत ताजगी",
+    "freshRate": "ताजगी दर",
+    "gradeDistribution": "ग्रेड वितरण",
+    "scanVolume": "स्कैन मात्रा",
+    "freshnessTrend": "ताजगी रुझान",
+    "backToResults": "परिणामों पर वापस",
+    "runAScan": "स्कैन चलाएं",
+    "loadingAnalytics": "विश्लेषण लोड हो रहा है...",
+    "crunchingData": "स्कैन डेटा प्रोसेस हो रहा है...",
+    "failedToLoad": "विश्लेषण लोड करने में विफल",
+    "noScansInRange": "इस समय सीमा में कोई स्कैन नहीं",
+    "tryDifferentFilter": "अलग फ़िल्टर आज़माएं",
+    "days7": "7 दिन",
+    "days30": "30 दिन",
+    "allTime": "सभी समय"
   }
 }

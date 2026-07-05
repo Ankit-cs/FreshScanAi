@@ -24,6 +24,25 @@ const GRADE_COLORS: Record<string, string> = {
 
 const PIE_COLORS = ['#22c55e', '#00e5ff', '#f59e0b', '#ef4444'];
 
+const tooltipStyle = {
+  background: 'var(--color-surface-mid)',
+  border: '1px solid var(--ghost-border-color)',
+  borderRadius: 0,
+  fontFamily: 'var(--font-mono)',
+  fontSize: '0.625rem',
+  color: 'var(--color-on-surface)',
+};
+
+const axisTickStyle = {
+  fill: 'var(--color-on-surface-variant)',
+  fontFamily: 'var(--font-mono)',
+  fontSize: 10,
+};
+
+const axisLineStyle = {
+  stroke: 'var(--ghost-border-color)',
+};
+
 function formatDate(ts: string) {
   const d = new Date(ts);
   return `${d.getDate()}/${d.getMonth() + 1}`;
@@ -90,6 +109,7 @@ export default function AnalyticsPage() {
         date,
         avgFreshness: Math.round(sum / count),
       }))
+      .sort((a, b) => a[0].localeCompare(b[0]))
       .reverse();
   }, [filteredScans]);
 
@@ -103,6 +123,7 @@ export default function AnalyticsPage() {
     });
     return Object.entries(counts)
       .map(([date, scans]) => ({ date, scans }))
+      .sort((a, b) => a[0].localeCompare(b[0]))
       .reverse();
   }, [filteredScans]);
 
@@ -117,7 +138,7 @@ export default function AnalyticsPage() {
   if (loading) {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <StatusTerminal messages={['Loading analytics...', 'Crunching scan data...']} />
+        <StatusTerminal messages={[t('analytics.loadingAnalytics'), t('analytics.crunchingData')]} />
       </div>
     );
   }
@@ -125,7 +146,7 @@ export default function AnalyticsPage() {
   if (errorKey) {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center gap-4 px-6">
-        <StatusTerminal messages={['Failed to load analytics']} />
+        <StatusTerminal messages={[t('analytics.failedToLoad')]} />
         <p className="text-error font-[family-name:var(--font-mono)] text-xs tracking-widest">
           {t(errorKey)}
         </p>
@@ -133,7 +154,7 @@ export default function AnalyticsPage() {
           to="/results"
           className="text-neon font-[family-name:var(--font-mono)] text-xs tracking-widest no-underline hover:underline"
         >
-          Back to Results
+          {t('analytics.backToResults')}
         </Link>
       </div>
     );
@@ -148,7 +169,7 @@ export default function AnalyticsPage() {
           className="inline-flex items-center gap-2 text-on-surface-variant hover:text-neon no-underline transition-colors mb-6 font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-widest"
         >
           <ArrowLeft size={14} />
-          Back to Results
+          {t('analytics.backToResults')}
         </Link>
 
         {/* Header */}
@@ -165,9 +186,9 @@ export default function AnalyticsPage() {
           {/* Time range filter */}
           <div className="flex gap-2">
             {([
-              { key: '7d', label: '7 Days' },
-              { key: '30d', label: '30 Days' },
-              { key: 'all', label: 'All Time' },
+              { key: '7d', label: t('analytics.days7') },
+              { key: '30d', label: t('analytics.days30') },
+              { key: 'all', label: t('analytics.allTime') },
             ] as const).map(opt => (
               <button
                 key={opt.key}
@@ -188,7 +209,7 @@ export default function AnalyticsPage() {
         <div className="grid grid-cols-3 gap-3 mb-8">
           <GlassCard className="p-4 text-center" variant="tonal">
             <span className="font-[family-name:var(--font-mono)] text-[0.5625rem] tracking-widest text-on-surface-variant block mb-1">
-              Total Scans
+              {t('analytics.totalScans')}
             </span>
             <span className="font-[family-name:var(--font-display)] text-2xl font-bold text-neon">
               {totalScans}
@@ -196,7 +217,7 @@ export default function AnalyticsPage() {
           </GlassCard>
           <GlassCard className="p-4 text-center" variant="tonal">
             <span className="font-[family-name:var(--font-mono)] text-[0.5625rem] tracking-widest text-on-surface-variant block mb-1">
-              Avg Freshness
+              {t('analytics.avgFreshness')}
             </span>
             <span className="font-[family-name:var(--font-display)] text-2xl font-bold text-neon">
               {avgScore}
@@ -204,7 +225,7 @@ export default function AnalyticsPage() {
           </GlassCard>
           <GlassCard className="p-4 text-center" variant="tonal">
             <span className="font-[family-name:var(--font-mono)] text-[0.5625rem] tracking-widest text-on-surface-variant block mb-1">
-              Fresh Rate
+              {t('analytics.freshRate')}
             </span>
             <span className="font-[family-name:var(--font-display)] text-2xl font-bold text-secondary">
               {freshRate}%
@@ -214,12 +235,12 @@ export default function AnalyticsPage() {
 
         {totalScans === 0 ? (
           <div className="text-center py-16">
-            <StatusTerminal messages={['No scans in this time range', 'Try a different filter']} className="justify-center mb-4" />
+            <StatusTerminal messages={[t('analytics.noScansInRange'), t('analytics.tryDifferentFilter')]} className="justify-center mb-4" />
             <Link
               to="/scanner"
               className="bg-neon text-on-primary px-8 py-4 font-[family-name:var(--font-display)] font-bold text-sm tracking-wider no-underline hover:bg-neon-dim transition-colors inline-block"
             >
-              Run a Scan
+              {t('analytics.runAScan')}
             </Link>
           </div>
         ) : (
@@ -229,7 +250,7 @@ export default function AnalyticsPage() {
               <div className="flex items-center gap-2 mb-4">
                 <PieIcon size={16} className="text-neon" />
                 <h2 className="font-[family-name:var(--font-display)] text-lg font-bold">
-                  Grade Distribution
+                  {t('analytics.gradeDistribution')}
                 </h2>
               </div>
               <ResponsiveContainer width="100%" height={280}>
@@ -251,15 +272,7 @@ export default function AnalyticsPage() {
                       />
                     ))}
                   </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      background: '#1a1a1a',
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      borderRadius: 0,
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.625rem',
-                    }}
-                  />
+                  <Tooltip contentStyle={tooltipStyle} />
                   <Legend
                     wrapperStyle={{
                       fontFamily: 'var(--font-mono)',
@@ -275,31 +288,23 @@ export default function AnalyticsPage() {
               <div className="flex items-center gap-2 mb-4">
                 <BarChart3 size={16} className="text-neon" />
                 <h2 className="font-[family-name:var(--font-display)] text-lg font-bold">
-                  Scan Volume
+                  {t('analytics.scanVolume')}
                 </h2>
               </div>
               <ResponsiveContainer width="100%" height={280}>
                 <BarChart data={volumeData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--ghost-border-color)" />
                   <XAxis
                     dataKey="date"
-                    tick={{ fill: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-mono)', fontSize: 10 }}
-                    axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+                    tick={axisTickStyle}
+                    axisLine={axisLineStyle}
                   />
                   <YAxis
-                    tick={{ fill: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-mono)', fontSize: 10 }}
-                    axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+                    tick={axisTickStyle}
+                    axisLine={axisLineStyle}
                     allowDecimals={false}
                   />
-                  <Tooltip
-                    contentStyle={{
-                      background: '#1a1a1a',
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      borderRadius: 0,
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.625rem',
-                    }}
-                  />
+                  <Tooltip contentStyle={tooltipStyle} />
                   <Bar dataKey="scans" fill="#00e5ff" radius={[2, 2, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
@@ -310,31 +315,23 @@ export default function AnalyticsPage() {
               <div className="flex items-center gap-2 mb-4">
                 <TrendingUp size={16} className="text-neon" />
                 <h2 className="font-[family-name:var(--font-display)] text-lg font-bold">
-                  Freshness Trend
+                  {t('analytics.freshnessTrend')}
                 </h2>
               </div>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={freshnessData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--ghost-border-color)" />
                   <XAxis
                     dataKey="date"
-                    tick={{ fill: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-mono)', fontSize: 10 }}
-                    axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+                    tick={axisTickStyle}
+                    axisLine={axisLineStyle}
                   />
                   <YAxis
                     domain={[0, 100]}
-                    tick={{ fill: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-mono)', fontSize: 10 }}
-                    axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+                    tick={axisTickStyle}
+                    axisLine={axisLineStyle}
                   />
-                  <Tooltip
-                    contentStyle={{
-                      background: '#1a1a1a',
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      borderRadius: 0,
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.625rem',
-                    }}
-                  />
+                  <Tooltip contentStyle={tooltipStyle} />
                   <Line
                     type="monotone"
                     dataKey="avgFreshness"

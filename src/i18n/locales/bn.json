@@ -368,5 +368,23 @@
     },
     "unknown": "একটি অপ্রত্যাশিত ত্রুটি ঘটেছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
     "serverError": "সার্ভার ত্রুটি। অনুগ্রহ করে পরে আবার চেষ্টা করুন।"
+  },
+  "analytics": {
+    "totalScans": "মোট স্ক্যান",
+    "avgFreshness": "গড় তাজা",
+    "freshRate": "তাজা হার",
+    "gradeDistribution": "গ্রেড বিতরণ",
+    "scanVolume": "স্ক্যান পরিমাণ",
+    "freshnessTrend": "তাজা প্রবণতা",
+    "backToResults": "ফলাফলে ফিরে যান",
+    "runAScan": "স্ক্যান চালান",
+    "loadingAnalytics": "বিশ্লেষণ লোড হচ্ছে...",
+    "crunchingData": "স্ক্যান ডেটা প্রক্রিয়াকরণ হচ্ছে...",
+    "failedToLoad": "বিশ্লেষণ লোড করতে ব্যর্থ",
+    "noScansInRange": "এই সময়ের মধ্যে কোনো স্ক্যান নেই",
+    "tryDifferentFilter": "ভিন্ন ফিল্টার চেষ্টা করুন",
+    "days7": "৭ দিন",
+    "days30": "৩০ দিন",
+    "allTime": "সব সময়"
   }
 }
