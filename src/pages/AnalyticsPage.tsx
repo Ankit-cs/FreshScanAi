@@ -109,7 +109,7 @@ export default function AnalyticsPage() {
         date,
         avgFreshness: Math.round(sum / count),
       }))
-      .sort((a, b) => a[0].localeCompare(b[0]))
+      .sort((a, b) => a.date.localeCompare(b.date))
       .reverse();
   }, [filteredScans]);
 
@@ -123,7 +123,7 @@ export default function AnalyticsPage() {
     });
     return Object.entries(counts)
       .map(([date, scans]) => ({ date, scans }))
-      .sort((a, b) => a[0].localeCompare(b[0]))
+      .sort((a, b) => a.date.localeCompare(b.date))
       .reverse();
   }, [filteredScans]);
 
