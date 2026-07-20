@@ -376,5 +376,23 @@
     },
     "unknown": "An unexpected error occurred. Please try again.",
     "serverError": "Server error. Please try again later."
+  },
+  "analytics": {
+    "totalScans": "Total Scans",
+    "avgFreshness": "Avg Freshness",
+    "freshRate": "Fresh Rate",
+    "gradeDistribution": "Grade Distribution",
+    "scanVolume": "Scan Volume",
+    "freshnessTrend": "Freshness Trend",
+    "backToResults": "Back to Results",
+    "runAScan": "Run a Scan",
+    "loadingAnalytics": "Loading analytics...",
+    "crunchingData": "Crunching scan data...",
+    "failedToLoad": "Failed to load analytics",
+    "noScansInRange": "No scans in this time range",
+    "tryDifferentFilter": "Try a different filter",
+    "days7": "7 Days",
+    "days30": "30 Days",
+    "allTime": "All Time"
   }
 }

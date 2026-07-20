@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight } from 'lucide-react';
+import { BarChart3 } from 'lucide-react';
 import GlassCard from '../components/GlassCard';
 import StatusTerminal from '../components/StatusTerminal';
 import { api } from '../lib/api';
@@ -114,6 +115,17 @@ export default function ResultsPage() {
             </span>
           </GlassCard>
         </div>
+
+        {/* Analytics link */}
+        {totalScans > 0 && (
+          <Link
+            to="/analytics"
+            className="flex items-center justify-center gap-2 bg-surface-mid text-on-surface py-3 font-[family-name:var(--font-display)] font-bold text-sm tracking-wider no-underline text-center transition-all duration-200 hover:bg-surface-high ghost-border mb-10"
+          >
+            <BarChart3 size={16} />
+            View Analytics Dashboard
+          </Link>
+        )}
 
         {/* History list */}
         {scans.length === 0 ? (
