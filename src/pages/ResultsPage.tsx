@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Download } from 'lucide-react';
 import { BarChart3 } from 'lucide-react';
 import GlassCard from '../components/GlassCard';
 import StatusTerminal from '../components/StatusTerminal';
@@ -35,6 +35,37 @@ export default function ResultsPage() {
     }
     load();
   }, []);
+
+  // Export CSV feature: downloads all scan records to the client
+  const handleExportCsv = () => {
+    const headers = ['Date', 'Time', 'Scan ID', 'Grade', 'Freshness Score', 'Species', 'Market', 'City'];
+    const rows = scans.map(s => {
+      const d = s.timestamp ? new Date(s.timestamp) : new Date();
+      return [
+        d.toLocaleDateString('en-IN'),
+        d.toLocaleTimeString('en-IN'),
+        s.scan_display_id || '',
+        s.grade || '',
+        s.freshness_index || 0,
+        s.species_detected || '',
+        s.market_name || '',
+        s.city || ''
+      ].map(v => `"${v}"`).join(',');
+    });
+    
+    const csvString = [headers.join(','), ...rows].join('\n');
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    const today = new Date().toISOString().split('T')[0];
+    a.download = `freshscan-history-${today}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   if (loading) {
     return (
@@ -128,6 +159,19 @@ export default function ResultsPage() {
         )}
 
         {/* History list */}
+        {scans.length > 0 && (
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-bold">History</h2>
+            <button
+              onClick={handleExportCsv}
+              className="flex items-center gap-2 bg-surface-mid text-on-surface px-4 py-2 font-[family-name:var(--font-display)] font-semibold text-xs tracking-wider no-underline hover:bg-surface-high ghost-border transition-colors cursor-pointer"
+            >
+              <Download size={14} />
+              {t('results.exportCsv')}
+            </button>
+          </div>
+        )}
+
         {scans.length === 0 ? (
           <div className="text-center py-16">
             <StatusTerminal messages={[t('results.noScansFound'), t('results.runFirstScan')]} className="justify-center mb-4" />

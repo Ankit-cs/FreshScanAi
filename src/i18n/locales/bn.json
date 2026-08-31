@@ -165,6 +165,7 @@
     "localOnlyNote": "[শুধুমাত্র স্থানীয়]"
   },
   "results": {
+    "exportCsv": "CSV রপ্তানি করুন",
     "loadingHistory": "ইতিহাস লোড হচ্ছে...",
     "queryingDb": "ডেটাবেস অনুসন্ধান করছে",
     "historyLoadFailed": "ইতিহাস লোড ব্যর্থ",

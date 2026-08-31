@@ -165,6 +165,7 @@
     "localOnlyNote": "[केवल स्थानीय]"
   },
   "results": {
+    "exportCsv": "सीएसवी निर्यात करें",
     "loadingHistory": "इतिहास लोड हो रहा है...",
     "queryingDb": "डेटाबेस को क्वेरी किया जा रहा है",
     "historyLoadFailed": "इतिहास लोड विफल",
