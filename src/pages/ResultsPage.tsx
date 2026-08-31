@@ -22,23 +22,28 @@ export default function ResultsPage() {
         const res = await api.getScanHistory(20, 0);
         setScans(res.scans);
         setStats(res.stats);
-      } catch (err) {
-        if (err instanceof Error && err.message.startsWith('error.')) {
-          setErrorKey(err.message);
-        } else {
-          setErrorKey('results.failedToLoadHistory');
-        }
+      } catch (err: any) {
         console.error('History fetch error:', err);
+        setErrorKey(err.message === 'Authentication required' ? 'error.auth.required' : 'error.network.server');
       } finally {
         setLoading(false);
       }
     }
     load();
   }, []);
-
   // Export CSV feature: downloads all scan records to the client
   const handleExportCsv = () => {
-    const headers = ['Date', 'Time', 'Scan ID', 'Grade', 'Freshness Score', 'Species', 'Market', 'City'];
+    // Note: The 'City' column is currently excluded because `get_scan_history` 
+    // does not return it from the DB. It can be added back once the backend supports it.
+    const headers = [
+      t('results.csvDate', 'Date'),
+      t('results.csvTime', 'Time'),
+      t('results.csvScanId', 'Scan ID'),
+      t('results.csvGrade', 'Grade'),
+      t('results.csvFreshness', 'Freshness Score'),
+      t('results.csvSpecies', 'Species'),
+      t('results.csvMarket', 'Market')
+    ];
     const rows = scans.map(s => {
       const d = s.timestamp ? new Date(s.timestamp) : new Date();
       return [
@@ -48,9 +53,8 @@ export default function ResultsPage() {
         s.grade || '',
         s.freshness_index || 0,
         s.species_detected || '',
-        s.market_name || '',
-        s.city || ''
-      ].map(v => `"${v}"`).join(',');
+        s.market_name || ''
+      ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(',');
     });
     
     const csvString = [headers.join(','), ...rows].join('\n');
@@ -154,14 +158,14 @@ export default function ResultsPage() {
             className="flex items-center justify-center gap-2 bg-surface-mid text-on-surface py-3 font-[family-name:var(--font-display)] font-bold text-sm tracking-wider no-underline text-center transition-all duration-200 hover:bg-surface-high ghost-border mb-10"
           >
             <BarChart3 size={16} />
-            View Analytics Dashboard
+            {t('results.viewAnalytics', 'View Analytics Dashboard')}
           </Link>
         )}
 
         {/* History list */}
         {scans.length > 0 && (
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-bold">History</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-bold">{t('results.historyTitle', 'History')}</h2>
             <button
               onClick={handleExportCsv}
               className="flex items-center gap-2 bg-surface-mid text-on-surface px-4 py-2 font-[family-name:var(--font-display)] font-semibold text-xs tracking-wider no-underline hover:bg-surface-high ghost-border transition-colors cursor-pointer"

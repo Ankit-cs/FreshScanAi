@@ -166,6 +166,15 @@
   },
   "results": {
     "exportCsv": "Export CSV",
+    "historyTitle": "History",
+    "viewAnalytics": "View Analytics Dashboard",
+    "csvDate": "Date",
+    "csvTime": "Time",
+    "csvScanId": "Scan ID",
+    "csvGrade": "Grade",
+    "csvFreshness": "Freshness Score",
+    "csvSpecies": "Species",
+    "csvMarket": "Market",
     "loadingHistory": "LOADING HISTORY...",
     "queryingDb": "QUERYING DB",
     "historyLoadFailed": "HISTORY LOAD FAILED",
@@ -395,5 +404,17 @@
     "days7": "7 Days",
     "days30": "30 Days",
     "allTime": "All Time"
+  },
+  "faqPage": {
+    "watermark": "USER_GUIDE_AND_FAQ",
+    "titleLine1": "How To Use",
+    "titleLine2": "FreshScan AI",
+    "subtitle": "Learn how to scan fish correctly, understand freshness scores, and use the Market Map effectively.",
+    "q1": "How should I position the fish for scanning?",
+    "a1": "Place the fish on a flat surface with good lighting. Keep the camera around 15 cm away and ensure the whole fish is visible.",
+    "q2": "What do the freshness scores mean?",
+    "a2": "Scores range from 0 to 100. Higher scores indicate fresher fish. Scores above 80 are considered high quality.",
+    "q3": "How does the Market Map work?",
+    "a3": "The Market Map displays freshness trends from anonymized scan results and helps users identify reliable seafood vendors."
   }
-}
+}
