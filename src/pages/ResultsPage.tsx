@@ -22,9 +22,12 @@ export default function ResultsPage() {
         const res = await api.getScanHistory(20, 0);
         setScans(res.scans);
         setStats(res.stats);
-      } catch (err: any) {
-        console.error('History fetch error:', err);
-        setErrorKey(err.message === 'Authentication required' ? 'error.auth.required' : 'error.network.server');
+      } catch (err) {
+        if (err instanceof Error && err.message.startsWith('error.')) {
+          setErrorKey(err.message);
+        } else {
+          setErrorKey('results.failedToLoadHistory');
+        }
       } finally {
         setLoading(false);
       }
